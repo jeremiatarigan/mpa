@@ -1,0 +1,98 @@
+// main_tabbar.dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'TabBar Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.deepOrange,
+      ),
+      home: const TabBarScreen(),
+    );
+  }
+}
+
+class TabBarScreen extends StatefulWidget {
+  const TabBarScreen({super.key});
+
+  @override
+  State<TabBarScreen> createState() => _TabBarScreenState();
+}
+
+class _TabBarScreenState extends State<TabBarScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  void _handleTabSelection() {
+    if (_tabController.indexIsChanging) {
+      // Ketika tab sedang berubah (animasi perpindahan)
+      print('Tab berubah ke indeks: ${_tabController.index}');
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabSelection);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('TabBar Example'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const <Widget>[
+            Tab(icon: Icon(Icons.flight), text: 'Penerbangan'),
+            Tab(icon: Icon(Icons.train), text: 'Kereta'),
+            Tab(icon: Icon(Icons.directions_bike), text: 'Sepeda'),
+          ],
+          labelColor: Colors.white, // Warna teks tab yang aktif
+          unselectedLabelColor: Colors.deepOrange[200], // Warna teks tab yang tidak aktif
+          indicatorColor: Colors.white, // Warna indikator di bawah tab
+          indicatorWeight: 4.0, // Ketebalan indikator
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const <Widget>[
+          Center(
+            child: Text(
+              'Konten Penerbangan',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Center(
+            child: Text(
+              'Konten Kereta',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Center(
+            child: Text(
+              'Konten Sepeda',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
