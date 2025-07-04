@@ -1,0 +1,77 @@
+// main_sliverappbar.dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'SliverAppBar Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.teal,
+      ),
+      home: const SliverAppBarScreen(),
+    );
+  }
+}
+
+class SliverAppBarScreen extends StatelessWidget {
+  const SliverAppBarScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            // Properti untuk SliverAppBar
+            expandedHeight: 200.0, // Tinggi app bar saat penuh
+            floating: true, // App bar muncul kembali saat scroll ke bawah
+            pinned: true, // App bar tetap terlihat di atas saat scroll ke atas
+            snap: true, // Jika floating true, app bar akan snap ke posisi penuh/tertutup
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              title: const Text('SliverAppBar Keren!', style: TextStyle(color: Colors.white)),
+              background: Image.network(
+                'https://via.placeholder.com/400x200', // Gambar latar belakang
+                fit: BoxFit.cover,
+              ),
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.share),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Tombol Bagikan ditekan')),
+                  );
+                },
+              ),
+            ],
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
+                  color: index.isOdd ? Colors.white : Colors.teal[50],
+                  height: 100.0,
+                  child: Center(
+                    child: Text(
+                      'Item Daftar ${index + 1}',
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                );
+              },
+              childCount: 30, // Jumlah item dalam daftar
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
