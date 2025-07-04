@@ -1,0 +1,86 @@
+// main_datepicker.dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'DatePicker Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blueGrey,
+      ),
+      home: const DatePickerScreen(),
+    );
+  }
+}
+
+class DatePickerScreen extends StatefulWidget {
+  const DatePickerScreen({super.key});
+
+  @override
+  State<DatePickerScreen> createState() => _DatePickerScreenState();
+}
+
+class _DatePickerScreenState extends State<DatePickerScreen> {
+  DateTime? _selectedDate;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000, 1),
+      lastDate: DateTime(2030, 12),
+      helpText: 'Pilih Tanggal Lahir', // Teks bantuan
+      cancelText: 'Batal', // Teks tombol batal
+      confirmText: 'Pilih', // Teks tombol konfirmasi
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.blueGrey, // Warna header picker
+            colorScheme: const ColorScheme.light(primary: Colors.blueGrey),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('DatePicker Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              _selectedDate == null
+                  ? 'Belum ada tanggal dipilih.'
+                  : 'Tanggal dipilih: ${_selectedDate!.toLocal().day}/${_selectedDate!.toLocal().month}/${_selectedDate!.toLocal().year}',
+              style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _selectDate(context),
+              child: const Text('Pilih Tanggal'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
