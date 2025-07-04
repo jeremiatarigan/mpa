@@ -1,0 +1,108 @@
+// main_bottomsheet.dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'BottomSheet Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.brown,
+      ),
+      home: const BottomSheetScreen(),
+    );
+  }
+}
+
+class BottomSheetScreen extends StatefulWidget {
+  const BottomSheetScreen({super.key});
+
+  @override
+  State<BottomSheetScreen> createState() => _BottomSheetScreenState();
+}
+
+class _BottomSheetScreenState extends State<BottomSheetScreen> {
+  void _showModalBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 200,
+          color: Colors.brown[100],
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Text('Ini adalah Modal Bottom Sheet!', style: TextStyle(fontSize: 18)),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  child: const Text('Tutup Bottom Sheet'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('BottomSheet Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () => _showModalBottomSheet(context),
+              child: const Text('Tampilkan Modal Bottom Sheet'),
+            ),
+            const SizedBox(height: 20),
+            Builder(
+              builder: (BuildContext scaffoldContext) {
+                return ElevatedButton(
+                  onPressed: () {
+                    Scaffold.of(scaffoldContext).showBottomSheet<void>(
+                      (BuildContext context) {
+                        return Container(
+                          height: 200,
+                          color: Colors.brown[300],
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                const Text('Ini adalah Persistent Bottom Sheet!', style: TextStyle(fontSize: 18)),
+                                const SizedBox(height: 20),
+                                ElevatedButton(
+                                  child: const Text('Tutup Persistent Bottom Sheet'),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: const Text('Tampilkan Persistent Bottom Sheet'),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
