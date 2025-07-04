@@ -1,0 +1,103 @@
+// main_switch.dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Switch Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+      ),
+      home: const SwitchScreen(),
+    );
+  }
+}
+
+class SwitchScreen extends StatefulWidget {
+  const SwitchScreen({super.key});
+
+  @override
+  State<SwitchScreen> createState() => _SwitchScreenState();
+}
+
+class _SwitchScreenState extends State<SwitchScreen> {
+  bool _isNotificationsEnabled = false;
+  bool _isDarkModeEnabled = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Switch Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ListTile(
+              title: const Text('Aktifkan Notifikasi'),
+              trailing: Switch(
+                value: _isNotificationsEnabled,
+                onChanged: (bool value) {
+                  setState(() {
+                    _isNotificationsEnabled = value;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        value
+                            ? 'Notifikasi diaktifkan'
+                            : 'Notifikasi dinonaktifkan',
+                      ),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                },
+                activeColor: Colors.orangeAccent,
+                activeTrackColor: Colors.orange[200],
+                inactiveThumbColor: Colors.grey,
+                inactiveTrackColor: Colors.grey[300],
+              ),
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              title: const Text('Mode Gelap'),
+              trailing: Switch.adaptive( // Adaptive switch menyesuaikan tampilan OS
+                value: _isDarkModeEnabled,
+                onChanged: (bool value) {
+                  setState(() {
+                    _isDarkModeEnabled = value;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        value ? 'Mode Gelap Aktif' : 'Mode Terang Aktif',
+                      ),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 30),
+            Text(
+              'Status Notifikasi: ${_isNotificationsEnabled ? 'Aktif' : 'Nonaktif'}',
+              style: const TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Status Mode Gelap: ${_isDarkModeEnabled ? 'Aktif' : 'Nonaktif'}',
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
