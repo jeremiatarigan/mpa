@@ -1,0 +1,139 @@
+// main_dialog.dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Dialog Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+      ),
+      home: const DialogScreen(),
+    );
+  }
+}
+
+class DialogScreen extends StatefulWidget {
+  const DialogScreen({super.key});
+
+  @override
+  State<DialogScreen> createState() => _DialogScreenState();
+}
+
+class _DialogScreenState extends State<DialogScreen> {
+  Future<void> _showAlertDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User harus tap tombol untuk menutup dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi Hapus'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Apakah Anda yakin ingin menghapus item ini?'),
+                Text('Tindakan ini tidak dapat dibatalkan.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Batal'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+              },
+            ),
+            TextButton(
+              child: const Text('Hapus', style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Item berhasil dihapus!')),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showSimpleDialog() async {
+    switch (await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Pilih Opsi'),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context, 'Opsi 1');
+              },
+              child: const Text('Opsi 1: Edit'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context, 'Opsi 2');
+              },
+              child: const Text('Opsi 2: Bagikan'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context, 'Opsi 3');
+              },
+              child: const Text('Opsi 3: Arsipkan'),
+            ),
+          ],
+        );
+      },
+    )) {
+      case 'Opsi 1':
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Anda memilih Edit')),
+        );
+        break;
+      case 'Opsi 2':
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Anda memilih Bagikan')),
+        );
+        break;
+      case 'Opsi 3':
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Anda memilih Arsipkan')),
+        );
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dialog Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: _showAlertDialog,
+              child: const Text('Tampilkan AlertDialog'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _showSimpleDialog,
+              child: const Text('Tampilkan SimpleDialog'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
