@@ -1,0 +1,89 @@
+// main_sizedbox.dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'SizedBox Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const SizedBoxScreen(),
+    );
+  }
+}
+
+class SizedBoxScreen extends StatefulWidget {
+  const SizedBoxScreen({super.key});
+
+  @override
+  State<SizedBoxScreen> createState() => _SizedBoxScreenState();
+}
+
+class _SizedBoxScreenState extends State<SizedBoxScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('SizedBox Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Contoh 1: SizedBox untuk memberikan jarak antar widget
+            const Text('Teks di atas SizedBox'),
+            const SizedBox(height: 20), // Memberikan jarak vertikal 20 piksel
+            const Text('Teks di bawah SizedBox'),
+            const SizedBox(height: 50),
+
+            // Contoh 2: SizedBox untuk menentukan ukuran child
+            const Text('Kotak dengan ukuran tetap:'),
+            SizedBox(
+              width: 150.0,
+              height: 100.0,
+              child: Container(
+                color: Colors.red,
+                child: const Center(
+                  child: Text(
+                    'Ukuran Tetap',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Contoh 3: SizedBox dengan child tanpa batasan ukuran dari SizedBox
+            // Jika parent punya batasan, SizedBox akan mengikuti parent
+            Container(
+              width: 200,
+              height: 150,
+              color: Colors.blue[100],
+              child: SizedBox(
+                width: 50, // Nilai ini akan diabaikan karena parent punya ukuran
+                height: 50, // Nilai ini akan diabaikan
+                child: Container(
+                  color: Colors.blue,
+                  child: const Center(
+                    child: Text(
+                      'Mengikuti Parent',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
