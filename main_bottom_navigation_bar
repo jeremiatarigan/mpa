@@ -1,0 +1,96 @@
+// main_bottom_navigation_bar.dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'BottomNavigationBar Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const BottomNavigationBarScreen(),
+    );
+  }
+}
+
+class BottomNavigationBarScreen extends StatefulWidget {
+  const BottomNavigationBarScreen({super.key});
+
+  @override
+  State<BottomNavigationBarScreen> createState() =>
+      _BottomNavigationBarScreenState();
+}
+
+class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
+  int _selectedIndex = 0; // Index item yang saat ini dipilih
+  static const List<Widget> _widgetOptions = <Widget>[
+    Icon(Icons.home, size: 150, color: Colors.blue),
+    Icon(Icons.search, size: 150, color: Colors.green),
+    Icon(Icons.person, size: 150, color: Colors.red),
+    Icon(Icons.settings, size: 150, color: Colors.grey),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('BottomNavigationBar Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _widgetOptions.elementAt(_selectedIndex),
+            const SizedBox(height: 20),
+            Text(
+              'Halaman yang dipilih: ${_selectedIndex == 0 ? "Home" : _selectedIndex == 1 ? "Search" : _selectedIndex == 2 ? "Profile" : "Settings"}',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: Colors.blue, // Warna aktif
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+            backgroundColor: Colors.green,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+            backgroundColor: Colors.red,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+            backgroundColor: Colors.grey,
+          ),
+        ],
+        currentIndex: _selectedIndex, // Index yang sedang aktif
+        selectedItemColor: Colors.white, // Warna ikon/teks saat dipilih
+        unselectedItemColor: Colors.black54, // Warna ikon/teks saat tidak dipilih
+        onTap: _onItemTapped, // Callback saat item di-tap
+        type: BottomNavigationBarType.shifting, // Efek transisi saat berpindah item
+      ),
+    );
+  }
+}
